@@ -12,17 +12,10 @@ namespace MaterialMvvmSample.Views
             this.InitializeComponent();
 
             DisableButton.Command = new Command(() => ErrorButton.IsEnabled = !ErrorButton.IsEnabled);
-            ErrorButton.Command = new Command(() => TextField.HasError = !TextField.HasError);
-        }
-
-        private void TargetButton_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == Button.IsEnabledProperty.PropertyName)
-            {
-                var button = (Button)sender;
-
-                if (button.IsEnabled) button.TextColor = Color.Aqua;
-            }
+            ErrorButton.Command = new Command(() =>
+                {
+                    TextField.ErrorText = string.IsNullOrEmpty(TextField.ErrorText) ? "This is error!" : null;
+                });
         }
     }
 

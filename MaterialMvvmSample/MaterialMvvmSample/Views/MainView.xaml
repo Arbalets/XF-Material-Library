@@ -17,7 +17,7 @@
     <StackLayout Padding="32,16"
                  HorizontalOptions="FillAndExpand"
                  VerticalOptions="CenterAndExpand">
-        <material:MaterialTextField x:Name="TextField" Placeholder="Placeholder" HelperText="Helper Text" ErrorText="Error Text" Text="Input Text" InputType="Default" ShouldAnimateUnderline="True" />
+        <material:MaterialTextField x:Name="TextField" Placeholder="Placeholder" HelperText="Helper Text" Text="Input Text" InputType="Default" ShouldAnimateUnderline="True" />
         <material:MaterialTextField x:Name="ChoiceField" Placeholder="Select a choice" HelperText="Helper Text" InputType="Choice" ShouldAnimateUnderline="True" 
                                     ChoicesBindingName="DisplayName" Choices="{x:Static viewModels:MainViewModel.ChoiceModels}" SelectedChoice="{Binding SelectedItem}" />
         <material:MaterialButton x:Name="DisableButton" Text="Disable Button" ButtonType="Flat" />

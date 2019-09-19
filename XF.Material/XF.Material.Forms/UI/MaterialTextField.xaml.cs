@@ -771,9 +771,9 @@ namespace XF.Material.Forms.UI
             counter.TextColor = this.ErrorColor;
             underline.Color = this.ShouldAnimateUnderline ? this.ErrorColor : Color.Transparent;
             persistentUnderline.Color = this.AlwaysShowUnderline ? this.ErrorColor : Color.Transparent;
-            trailingIcon.IsVisible = true;
             trailingIcon.Source = "xf_error";
             trailingIcon.TintColor = this.ErrorColor;
+            trailingIcon.IsVisible = true;
 
             if (string.IsNullOrEmpty(this.ErrorText))
             {
@@ -997,10 +997,13 @@ namespace XF.Material.Forms.UI
 
         private void OnErrorTextChanged()
         {
-            if (this.HasError)
+            if (string.IsNullOrEmpty(ErrorText))
             {
-                this.ChangeToErrorState();
+                HasError = false;
+                // Switch back to original helper text
+                OnHelperTextChanged(HelperText);
             }
+            else HasError = true;
         }
 
         private void OnFloatingPlaceholderEnabledChanged(bool isEnabled)
