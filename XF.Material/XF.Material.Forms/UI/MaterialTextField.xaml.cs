@@ -1002,7 +1002,10 @@ namespace XF.Material.Forms.UI
                 HasError = false;
                 // Switch back to original helper text
                 OnHelperTextChanged(HelperText);
+                return;
             }
+
+            if (HasError) ChangeToErrorState();
             else HasError = true;
         }
 
