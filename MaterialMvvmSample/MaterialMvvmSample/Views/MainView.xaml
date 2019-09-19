@@ -6,6 +6,7 @@
                     xmlns:matd="clr-namespace:XF.Material.Forms.UI.Dialogs;assembly=XF.Material.Forms"
                     xmlns:matdc="clr-namespace:XF.Material.Forms.UI.Dialogs.Configurations;assembly=XF.Material.Forms"
                     xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
+                    xmlns:viewModels="clr-namespace:MaterialMvvmSample.ViewModels;assembly=MaterialMvvmSample"
                     x:Name="Root"
                     Title="Material MVVM"
                     material:MaterialNavigationPage.AppBarColor="#2c3e50"
@@ -15,5 +16,12 @@
                     material:MaterialNavigationPage.StatusBarColor="#1B3147">
     <StackLayout Padding="32,16"
                  HorizontalOptions="FillAndExpand"
-                 VerticalOptions="CenterAndExpand" />
+                 VerticalOptions="CenterAndExpand">
+        <material:MaterialTextField x:Name="TextField" Placeholder="Placeholder" HelperText="Helper Text" ErrorText="Error Text" Text="Input Text" InputType="Default" ShouldAnimateUnderline="True" />
+        <material:MaterialTextField x:Name="ChoiceField" Placeholder="Select a choice" HelperText="Helper Text" InputType="Choice" ShouldAnimateUnderline="True" 
+                                    ChoicesBindingName="DisplayName" Choices="{x:Static viewModels:MainViewModel.ChoiceModels}" SelectedChoice="{Binding SelectedItem}" />
+        <material:MaterialButton x:Name="DisableButton" Text="Disable Button" ButtonType="Flat" />
+        <material:MaterialButton x:Name="ErrorButton" Text="Show error" ButtonType="Flat" IsEnabled="False" />
+        <material:MaterialButton Text="Check selected" ButtonType="Flat" Command="{Binding CheckSelectedCommand}" />
+    </StackLayout>
 </local:BaseMainView>

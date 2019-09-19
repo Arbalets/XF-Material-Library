@@ -96,6 +96,8 @@ namespace XF.Material.Forms.UI
 
         public static readonly BindableProperty UnderlineColorProperty = BindableProperty.Create(nameof(UnderlineColor), typeof(Color), typeof(MaterialTextField), Color.FromHex("#99000000"));
 
+        public static readonly BindableProperty SelectedChoiceProperty = BindableProperty.Create(nameof(SelectedChoice), typeof(object), typeof(MaterialTextField), null, BindingMode.TwoWay);
+
         private const double AnimationDuration = 0.35;
         private readonly Easing _animationCurve = Easing.SinOut;
         private readonly Dictionary<string, Action> _propertyChangeActions;
@@ -496,6 +498,12 @@ namespace XF.Material.Forms.UI
         {
             get => (Color)this.GetValue(UnderlineColorProperty);
             set => this.SetValue(UnderlineColorProperty, value);
+        }
+
+        public object SelectedChoice
+        {
+            get => this.GetValue(SelectedChoiceProperty);
+            set => this.SetValue(SelectedChoiceProperty, value);
         }
 
         /// <inheritdoc />
@@ -1204,6 +1212,7 @@ namespace XF.Material.Forms.UI
             if (this.InputType == MaterialTextFieldInputType.Choice && !string.IsNullOrEmpty(text))
             {
                 var selectedChoice = this.GetSelectedChoice(_selectedIndex);
+                SelectedChoice = selectedChoice;
                 this.ChoiceSelected?.Invoke(this, new SelectedItemChangedEventArgs(selectedChoice));
                 this.ChoiceSelectedCommand?.Execute(selectedChoice);
             }
@@ -1244,6 +1253,34 @@ namespace XF.Material.Forms.UI
             {
                 persistentUnderline.Color = underlineColor;
             }
+        }
+
+        private void OnSelectedChoiceChanged(object choice)
+        {
+            if (Choices == null || Choices.Count <= 0) return;
+
+            if (choice == null)
+            {
+                _selectedIndex = -1;
+                Text = null;
+                return;
+            }
+
+            var index = Choices.IndexOf(choice);
+            if (index == _selectedIndex) return;
+
+            string text;
+            if (string.IsNullOrEmpty(ChoicesBindingName))
+                text = choice as string;
+            else
+            {
+                var displayProperty = choice.GetType().GetProperty(ChoicesBindingName);
+                if(displayProperty == null) return;
+                text = displayProperty.GetValue(choice) as string;
+            }
+
+            _selectedIndex = index;
+            Text = text;
         }
 
         private void SetControl()
@@ -1294,7 +1331,8 @@ namespace XF.Material.Forms.UI
                 { nameof(this.IsTextPredictionEnabled), () => this.OnKeyboardFlagsChanged(this.IsAutoCapitalizationEnabled, this.IsSpellCheckEnabled, this.IsTextPredictionEnabled) },
                 { nameof(this.IsAutoCapitalizationEnabled), () => this.OnKeyboardFlagsChanged(this.IsAutoCapitalizationEnabled, this.IsSpellCheckEnabled, this.IsTextPredictionEnabled) },
                 { nameof(this.TextFontSize), () => this.OnTextFontSizeChanged(this.TextFontSize) },
-                { nameof(this.ErrorText), () => this.OnErrorTextChanged() }
+                { nameof(this.ErrorText), () => this.OnErrorTextChanged() },
+                { nameof(this.SelectedChoice), () => this.OnSelectedChoiceChanged(this.SelectedChoice) }
             };
         }
 

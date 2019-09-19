@@ -1,6 +1,7 @@
 ﻿using MaterialMvvmSample.Utilities.Dialogs;
 using MaterialMvvmSample.Views;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -40,6 +41,8 @@ namespace MaterialMvvmSample.ViewModels
                 }
             };
             this.SelectedFilters = new List<int>();
+
+            SelectedItem = ChoiceModels[2] as ChoiceModel;
         }
 
         public Color PrimaryColor => Color.Red;
@@ -90,13 +93,30 @@ namespace MaterialMvvmSample.ViewModels
             }
         });
 
+        public ICommand CheckSelectedCommand => new Command(async () => await ShowSelectedItem());
+
         public static IList<string> Choices => new List<string>
         {
             "Ayala Corporation",
             "San Miguel Corporation",
             "YNGEN Holdings Inc.",
             "ERNI Development Center Philippines, Inc., Bern, Switzerland"
-        }; 
+        };
+
+        public static IList ChoiceModels = new List<ChoiceModel>
+        {
+            new ChoiceModel {Id = 1, DisplayName = "Ayala Corporation"},
+            new ChoiceModel {Id = 2, DisplayName = "San Miguel Corporation"},
+            new ChoiceModel {Id = 3, DisplayName = "YNGEN Holdings Inc."},
+            new ChoiceModel {Id = 4, DisplayName = "ERNI Development Center Philippines, Inc., Bern, Switzerland"}
+        };
+
+        private ChoiceModel _selectedItem;
+        public ChoiceModel SelectedItem
+        {
+            get => _selectedItem;
+            set => this.Set(ref _selectedItem, value);
+        }
 
         public ICommand JobSelectedCommand => new Command<string>(async (s) => await this.ViewItemSelected(s));
 
@@ -139,6 +159,11 @@ namespace MaterialMvvmSample.ViewModels
         {
             get => _selectedFilters;
             set => this.Set(ref _selectedFilters, value);
+        }
+
+        private async Task ShowSelectedItem()
+        {
+            await _dialogService.AlertExistingJob(SelectedItem.DisplayName);
         }
 
         private async Task ListMenuSelected(MaterialMenuResult s)
@@ -248,5 +273,11 @@ namespace MaterialMvvmSample.ViewModels
             get => _isNew;
             set => this.Set(ref _isNew, value);
         }
+    }
+
+    public class ChoiceModel
+    {
+        public int Id { get; set; }
+        public string DisplayName { get; set; }
     }
 }

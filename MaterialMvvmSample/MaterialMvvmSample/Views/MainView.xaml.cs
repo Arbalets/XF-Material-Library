@@ -1,14 +1,6 @@
 ﻿using MaterialMvvmSample.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using XF.Material.Forms;
 using Xamarin.Forms.Xaml;
-using XF.Material.Forms.UI;
-using XF.Material.Forms.UI.Dialogs;
-using Xamarin.Forms.Internals;
 
 namespace MaterialMvvmSample.Views
 {
@@ -18,6 +10,19 @@ namespace MaterialMvvmSample.Views
         public MainView()
         {
             this.InitializeComponent();
+
+            DisableButton.Command = new Command(() => ErrorButton.IsEnabled = !ErrorButton.IsEnabled);
+            ErrorButton.Command = new Command(() => TextField.HasError = !TextField.HasError);
+        }
+
+        private void TargetButton_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Button.IsEnabledProperty.PropertyName)
+            {
+                var button = (Button)sender;
+
+                if (button.IsEnabled) button.TextColor = Color.Aqua;
+            }
         }
     }
 
