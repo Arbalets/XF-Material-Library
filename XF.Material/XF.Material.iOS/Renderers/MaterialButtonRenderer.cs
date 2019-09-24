@@ -3,7 +3,6 @@ using CoreGraphics;
 using Foundation;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using UIKit;
 using Xamarin.Forms;
@@ -501,8 +500,7 @@ namespace XF.Material.iOS.Renderers
             this.Control.TitleLabel.Text = text;
 
             var range = new NSRange(0, text?.Length ?? 0);
-            var originalAttr = this.Control.TitleLabel.AttributedText as NSMutableAttributedString;
-            var newAttr = new NSMutableAttributedString(originalAttr);
+            var newAttr = new NSMutableAttributedString(this.Control.TitleLabel.AttributedText);
             newAttr.AddAttribute(UIStringAttributeKey.KerningAdjustment, FromObject((float)_materialButton.LetterSpacing), range);
 
             this.Control.SetAttributedTitle(newAttr, UIControlState.Normal);
